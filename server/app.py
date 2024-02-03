@@ -92,14 +92,12 @@ class MemberOnlyIndex(Resource):
             member_articles = [article.to_dict() for article in Article.query.filter_by(is_member_only=True).all()]
             return make_response(jsonify(member_articles), 200)
         else:
-            # User is not signed in, return 401 unauthorized with an error message
             return {'message': 'Unauthorized. Please log in to access members-only content.'}, 401
 
 class MemberOnlyArticle(Resource):
     
     def get(self, id):
         if session.get('user_id'):
-            # User is signed in, return JSON data for the specific members-only article
             article = Article.query.filter_by(id=id, is_member_only=True).first()
 
             if article:
@@ -107,7 +105,7 @@ class MemberOnlyArticle(Resource):
             else:
                 return {'message': 'Members-only article not found.'}, 200
         else:
-            # User is not signed in, return 401 unauthorized with an error message
+
             return {'message': 'Unauthorized. Please log in to access members-only content.'}, 401
 
 api.add_resource(ClearSession, '/clear', endpoint='clear')
